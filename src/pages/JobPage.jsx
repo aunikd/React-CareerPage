@@ -1,15 +1,26 @@
 import React from 'react'
-import { useParams, useLoaderData } from 'react-router-dom';
+import { useParams, useLoaderData, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaMapLocation } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { useState, useEffect } from 'react'
 import Spinner from '../components/Spinner'
 
 
-const JobPage = () => {
+const JobPage = ({deleteJob}) => {
     const { id } = useParams();
     const job = useLoaderData();
+    const navigate = useNavigate();
+
+    const onDeleteClick=(jobId)=>{
+        const confirm =window.confirm('Confirm Job Deletion?')
+        if(!confirm) return;
+        deleteJob(jobId)
+
+        toast.success('Job Deleted Successfully')
+        navigate('/jobs')
+    }
     // const [job, setJob] = useState(null);
     // const [loading, setLoading] = useState(true);
 
@@ -36,7 +47,8 @@ const JobPage = () => {
                         to="/jobs.html"
                         className="text-indigo-500 hover:text-indigo-600 flex items-center"
                     >
-                        <FaArrowLeft className='mr-2'></FaArrowLeft> Back to Job Listings
+                        <FaArrowLeft className='mr-2'></FaArrowLeft> 
+                        Back to Job Listings
                     </Link>
                 </div>
             </section>
@@ -53,8 +65,7 @@ const JobPage = () => {
                                 {job.title}
                                 </h1>
                                 <div
-                                    className="text-gray-500 mb-4 flex align-middle justify-center md:justify-start"
-                                >
+                                    className="text-gray-500 mb-4 flex align-middle justify-center md:justify-start">
                                     <FaMapLocation className='text-orange-700 mr-2'></FaMapLocation>
                                     <p className="text-orange-700">{job.location}</p>
                                 </div>
@@ -101,13 +112,11 @@ const JobPage = () => {
                             <div className="bg-white p-6 rounded-lg shadow-md mt-6">
                                 <h3 className="text-xl font-bold mb-6">Manage Job</h3>
                                 <Link
-                                    to={`/jobs/edit/${job.id}`}
-                                    className="bg-indigo-500 hover:bg-indigo-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-                                >Edit Job</Link
-                                >
-                                <button
-                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
-                                >
+                                    to={`/edit-job/${job.id}`}
+                                    className="bg-indigo-500 hover:bg-indigo-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block">
+                                        Edit Job
+                                        </Link>
+                                <button onClick={()=>onDeleteClick(job.id)} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block">
                                     Delete Job
                                 </button>
                             </div>

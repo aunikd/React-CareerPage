@@ -11,7 +11,7 @@ const Spinner = ({loading}) => {
     <ClipLoader
     color='violet'
     loading={loading}
-    ccsOverride={override}
+    cssOverride={override}
     size={150}
     />
   )
